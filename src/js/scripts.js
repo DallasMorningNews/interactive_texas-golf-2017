@@ -1,0 +1,125 @@
+/* global mapboxgl: true; GeoJSON: true */
+
+import $ from 'jquery';
+import pym from 'pym.js';
+
+const pymChild = new pym.Child();
+
+// our three different course lists
+let top100 = [];
+let pub50 = [];
+let topPub = [];
+
+// paths to our json data
+const sourceArray = [
+  '//interactives.dallasnews.com/data-store/2017/04-2017-texas-golf-public.json',
+  '//interactives.dallasnews.com/data-store/2017/04-2017-texas-golf-top-100.json',
+  '//interactives.dallasnews.com/data-store/2017/04-2017-texas-golf-pub-50.json',
+];
+
+/*
+================================
+== MAP SETUP
+================================
+*/
+
+
+const map = new mapboxgl.Map({
+  container: 'map',
+  style: 'http://maps.dallasnews.com/styles.json',
+  center: [-99.10238, 31.23492],
+  zoom: 5,
+});
+
+map.scrollZoom.disable();
+map.addControl(new mapboxgl.NavigationControl());
+
+
+function drawMap() {
+  console.log(top100);
+  map.addSource('top100', {
+    type: 'geojson',
+    data: top100,
+  });
+
+  map.addLayer({
+    id: 'top100courses',
+    source: 'top100',
+    type: 'circle',
+    paint: {
+      'circle-radius': {
+        stops: [[5, 4], [8, 6], [11, 8]],
+      },
+      'circle-color': {
+        property: 'access',
+        stops: [
+          ['private', '#4575b4'],
+          ['public', '#d73027'],
+        ],
+      },
+      'circle-opacity': 0.75,
+      'circle-stroke-width': 1,
+      'circle-stroke-color': '#FFFFFF',
+    },
+  });
+
+  // map.addSource('pub50', {
+  //   type: 'geojson',
+  //   data: pub50,
+  // });
+  //
+  // map.addLayer({
+  //   id: 'pub50courses',
+  //   source: 'pub50',
+  //   type: 'circle',
+  //   paint: {
+  //     'circle-radius': {
+  //       stops: [[5, 4], [8, 11], [11, 16]],
+  //     },
+  //     'circle-color': '#4575b4',
+  //     'circle-opacity': 0.85,
+  //   },
+  // });
+}
+
+/*
+================================
+== DATA SETUP
+================================
+*/
+
+// getting our data
+function getData() {
+  // i is a counter to see how much of our data has been retrieved
+  let i = 0;
+  // DATADRAWS is our total number of data files to retrieve
+  const DATADRAWS = 3;
+
+  // we're going to go out and get each of our data files, then as they are retrieved
+  // itterate our counter by one, then check if we've retrieved all of the data files
+  // if we have, we'll run our initial map drawing function
+  $.getJSON(sourceArray[0], (data) => {
+    topPub = GeoJSON.parse(data, { Point: ['latitude', 'longitude'] });
+    i += 1;
+    if (i >= DATADRAWS) { drawMap(); }
+  });
+
+  $.getJSON(sourceArray[1], (data) => {
+    top100 = GeoJSON.parse(data, { Point: ['latitude', 'longitude'] });
+    i += 1;
+    if (i >= DATADRAWS) { drawMap(); }
+  });
+
+  $.getJSON(sourceArray[2], (data) => {
+    pub50 = GeoJSON.parse(data, { Point: ['latitude', 'longitude'] });
+    i += 1;
+    if (i >= DATADRAWS) { drawMap(); }
+  });
+}
+
+// when the map is loaded, we'll start gathering our data
+map.on('load', () => getData());
+
+// Call this every time you need to resize the iframe, after your
+// graphic is drawn, etc.
+pymChild.sendHeight();
