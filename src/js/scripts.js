@@ -36,7 +36,6 @@ map.addControl(new mapboxgl.NavigationControl());
 
 
 function drawMap() {
-  console.log(top100);
   map.addSource('top100', {
     type: 'geojson',
     data: top100,
@@ -52,9 +51,10 @@ function drawMap() {
       },
       'circle-color': {
         property: 'access',
+        type: 'categorical',
         stops: [
           ['private', '#4575b4'],
-          ['public', '#d73027'],
+          ['public', '#fec44f'],
         ],
       },
       'circle-opacity': 0.75,
@@ -63,23 +63,60 @@ function drawMap() {
     },
   });
 
-  // map.addSource('pub50', {
-  //   type: 'geojson',
-  //   data: pub50,
-  // });
-  //
-  // map.addLayer({
-  //   id: 'pub50courses',
-  //   source: 'pub50',
-  //   type: 'circle',
-  //   paint: {
-  //     'circle-radius': {
-  //       stops: [[5, 4], [8, 11], [11, 16]],
-  //     },
-  //     'circle-color': '#4575b4',
-  //     'circle-opacity': 0.85,
-  //   },
-  // });
+  map.addSource('pub50', {
+    type: 'geojson',
+    data: pub50,
+  });
+
+  map.addLayer({
+    id: 'pub50courses',
+    source: 'pub50',
+    type: 'circle',
+    paint: {
+      'circle-radius': {
+        stops: [[5, 4], [8, 11], [11, 16]],
+      },
+      'circle-color': '#52b033',
+      'circle-opacity': 0.75,
+      'circle-stroke-width': 1,
+      'circle-stroke-color': '#FFFFFF',
+    },
+    layout: {
+      visibility: 'none',
+    },
+  });
+
+  map.addSource('topPub', {
+    type: 'geojson',
+    data: topPub,
+  });
+
+  map.addLayer({
+    id: 'topPubCources',
+    source: 'topPub',
+    type: 'circle',
+    paint: {
+      'circle-radius': {
+        stops: [[5, 4], [8, 11], [11, 16]],
+      },
+      'circle-color': {
+        property: 'classification',
+        type: 'categorical',
+        stops: [
+          ['Expensive', '#800026'],
+          ['High', '#fc4e2a'],
+          ['Economy', '#fed976'],
+
+        ],
+      },
+      'circle-opacity': 0.85,
+      'circle-stroke-width': 1,
+      'circle-stroke-color': '#FFFFFF',
+    },
+    layout: {
+      visibility: 'none',
+    },
+  });
 }
 
 /*
