@@ -12,9 +12,9 @@ let topPub = [];
 
 // paths to our json data
 const sourceArray = [
-  '//interactives.dallasnews.com/data-store/2017/04-2017-texas-golf-public.json',
-  '//interactives.dallasnews.com/data-store/2017/04-2017-texas-golf-top-100.json',
-  '//interactives.dallasnews.com/data-store/2017/04-2017-texas-golf-pub-50.json',
+  '//interactives.dallasnews.com/data-store/2017/04-2017-texas-golf-public-test.json',
+  '//interactives.dallasnews.com/data-store/2017/04-2017-texas-golf-top-100-test.json',
+  '//interactives.dallasnews.com/data-store/2017/04-2017-texas-golf-pub-50-test.json',
 ];
 
 /*
@@ -116,6 +116,31 @@ function drawMap() {
     layout: {
       visibility: 'none',
     },
+  });
+
+
+  map.on('click', (e) => {
+    const features = map.queryRenderedFeatures(e.point, {});
+
+    if (!features.length) {
+      return;
+    }
+    console.log(features);
+    const feature = features[0];
+
+    const popup = new mapboxgl.Popup()
+      .setLngLat(feature.geometry.coordinates)
+      .setHTML('Hello');
+
+    popup.addTo(map);
+
+
+    map.flyTo({ center: features[0].geometry.coordinates, zoom: 9 });
+  });
+
+  map.on('mousemove', (e) => {
+    const features = map.queryRenderedFeatures(e.point, {});
+    map.getCanvas().style.cursor = (features.length) ? 'pointer' : '';
   });
 }
 
