@@ -23,4 +23,25 @@ body {
   height: 600px;
 }
 
+.mapboxgl-popup-content {
+  font-family: $sans;
+  max-width: 250px;
+  padding: 10px;
+  h6 {
+    @include type(1.5rem, 1.8rem, 0);
+    margin: 0 0 .6rem;
+  }
+  h5 {
+    @include type(1.8rem, 2.4rem, 0);
+    margin: 0 0 .6rem;
+  }
+  p {
+    @include type(1.3rem, 1.5rem, 0);
+    margin: 0 0 .3rem;
+  }
+  a {
+    color: $dmnblue;
+  }
+}
+
 // Your styles go here

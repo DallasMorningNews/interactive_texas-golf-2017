@@ -5,8 +5,8 @@
     <meta name="robots" content="noindex, nofollow">
 
     <link rel="stylesheet" href="https://cloud.typography.com/6922714/7642152/css/fonts.css">
-    <link rel="stylesheet" href="css/styles.css" />
     <link href='https://api.mapbox.com/mapbox-gl-js/v0.29.0/mapbox-gl.css' rel='stylesheet' />
+    <link rel="stylesheet" href="css/styles.css" />
     <script src='https://api.mapbox.com/mapbox-gl-js/v0.29.0/mapbox-gl.js'></script>
     <script src='js/geojson.js' type="text/javascript"></script>
   </head>
@@ -19,7 +19,10 @@
         <p>Chatter text</p>
       </div>
 
-      <div id="map"></div>
+      <div id="map-container">
+        <button id="switcher">Switch</button>
+        <div id="map"></div>
+      </div>
 
       <!-- The rest of your content goes here -->
     </div>

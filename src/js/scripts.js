@@ -125,12 +125,31 @@ function drawMap() {
     if (!features.length) {
       return;
     }
-    console.log(features);
+
     const feature = features[0];
+    console.log(feature);
+    let content = '';
+    if (!feature.properties.access) {
+      content += `<h6>${feature.properties.rank}. ${feature.properties.classifcation} courses</h6>`;
+    }
+    if (feature.properties.access) {
+      content += `<h5>${feature.properties.rank}.  ${feature.properties.coursename}</h5>`;
+    } else {
+      content += `<h5>${feature.properties.coursename}</h5>`;
+    }
+
+    content += `<p><strong>Location: </strong>${feature.properties.city}</p>`;
+    if (feature.properties.fee !== 'N/A') {
+      content += `<p><strong>Fee: </strong>$${feature.properties.fee}</p>`;
+    }
+    if (feature.properties.url) {
+      content += `<a href='${feature.properties.url}' targe='_blank'>${feature.properties.url}</a>`;
+    }
 
     const popup = new mapboxgl.Popup()
       .setLngLat(feature.geometry.coordinates)
-      .setHTML('Hello');
+      .setHTML(content);
+
 
     popup.addTo(map);
 
@@ -141,6 +160,13 @@ function drawMap() {
   map.on('mousemove', (e) => {
     const features = map.queryRenderedFeatures(e.point, {});
     map.getCanvas().style.cursor = (features.length) ? 'pointer' : '';
+  });
+
+
+  $('#switcher').click(() => {
+    console.log('switch');
+    map.setLayoutProperty('top100courses', 'visibility', 'none');
+    map.setLayoutProperty('pub50courses', 'visibility', 'visible');
   });
 }
 
