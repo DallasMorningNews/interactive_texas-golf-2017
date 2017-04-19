@@ -15,15 +15,38 @@
 
     <div id="embed-content">
       <div class="chatter">
-        <h4>Embed title</h4>
-        <p>Chatter text</p>
+        <h4>The Top 100 golf courses across Texas</h4>
+        <p>From Big Bend to Big D, we rank the Top 100 golf courses </p>
+        <nav id="golf-nav">
+          <ul>
+            <li>View: </li>
+            <li id="top-100" class="nav--active">Top 100</li>
+            <li id="top-public">Best public</li>
+          </ul>
+        </nav>
       </div>
 
       <div id="map-container">
-        <button id="switcher">Switch</button>
+        <div id="course-select">
+          <ul class="select--filter-group" id="select__top100">
+            <li>Filter by:</li>
+            <li id="select__100private" class="select--active select__option">Private</li>
+            <li id="select__100public" class="select--active select__option">Public</li>
+          </ul>
+
+          <ul id="select__public" class="select--filter-group noshow">
+            <li>Filter by:</li>
+            <li id="select__top50" class="select--active select__option">Top 50</li>
+            <li id="select__economy" class="select__option select__sub-filter">Economy</li>
+            <li id="select__high" class="select__option select__sub-filter">High</li>
+            <li id="select__expensive" class="select__option select__sub-filter">Expensive</li>
+          </ul>
+
+        </div>
         <div id="map"></div>
       </div>
 
+      <p class="note">Rankings are determined by the average score of ratings by The Dallas Morning News’ Texas Golf panel. Panel members rated courses on a 1-10 scale. To be eligible for the Top 100, a course needed to be rated by 12 of the 90 panel members, 13 percent of the panel. Click on locations below to see more info about each course. (Public course price breakdown: Economy: $49 or less; Mid-priced: $50 - $70; Expensive: $71 and up)</p>
       <!-- The rest of your content goes here -->
     </div>
 

@@ -18,9 +18,19 @@ body {
   }
 }
 
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
 #map {
   width: 100%;
   height: 600px;
+}
+
+#map-container {
+  position: relative;
 }
 
 .mapboxgl-popup-content {
@@ -44,4 +54,80 @@ body {
   }
 }
 
-// Your styles go here
+#golf-nav {
+  ul {
+    li {
+      display: inline-block;
+      @include type(1.3rem, 1.8rem, 0);
+      margin-right: 10px;
+      font-weight: bold;
+      text-transform: uppercase;
+      cursor: pointer;
+      color: $chartRed;
+      &:first-of-type {
+        text-transform: none;
+        font-weight: normal;
+        cursor: auto;
+        color: black;
+      }
+    }
+  }
+}
+
+#course-select {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  padding: 10px;
+  background-color: rgba(255,255,255, .9);
+  min-width: 120px;
+  li {
+    @include type(1.2rem, 1.8rem, .6rem);
+    padding: 5px 5px 5px 20px;
+    position: relative;
+    text-transform: uppercase;
+    cursor: pointer;
+    font-weight: bold;
+    &:before {
+      content: "";
+      display: block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      position: absolute;
+      top: 9px;
+      left: 5px;
+    }
+    &:last-of-type {
+      margin-bottom: 0;
+    }
+    &:first-of-type {
+      padding: 0 0;
+      margin: 0 0 .3rem;
+      @include type(1.2rem, 1.8rem, .3rem);
+      text-transform: none;
+      cursor: auto;
+      font-weight: normal;
+    }
+  }
+}
+
+.nav--active {border-bottom: 2px solid $chartRed;}
+
+.select--active {background-color: $black235;}
+
+#select__100public:before {background-color: #fec44f;}
+#select__100private:before {background-color: #4575b4;}
+#select__top50:before {background-color: #52b033;}
+#select__economy:before {background-color: #fed976;}
+#select__high:before {background-color: #fc4e2a;}
+#select__expensive:before {background-color: #800026;}
+
+.note {
+  @include type(1.1rem, 1.5rem, 0);
+}
+
+.noshow {
+  display: none;
+}

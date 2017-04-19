@@ -53,11 +53,18 @@ function drawMap() {
         property: 'access',
         type: 'categorical',
         stops: [
-          ['private', '#4575b4'],
-          ['public', '#fec44f'],
+          ['Private', '#4575b4'],
+          ['Public', '#fec44f'],
         ],
       },
-      'circle-opacity': 0.75,
+      'circle-opacity': {
+        property: 'access',
+        type: 'categorical',
+        stops: [
+          ['Private', 0.75],
+          ['Public', 0.75],
+        ],
+      },
       'circle-stroke-width': 1,
       'circle-stroke-color': '#FFFFFF',
     },
@@ -92,7 +99,7 @@ function drawMap() {
   });
 
   map.addLayer({
-    id: 'topPubCources',
+    id: 'topPubCourses',
     source: 'topPub',
     type: 'circle',
     paint: {
@@ -106,10 +113,17 @@ function drawMap() {
           ['Expensive', '#800026'],
           ['High', '#fc4e2a'],
           ['Economy', '#fed976'],
-
         ],
       },
-      'circle-opacity': 0.85,
+      'circle-opacity': {
+        property: 'classification',
+        type: 'categorical',
+        stops: [
+          ['Expensive', 0.85],
+          ['High', 0.85],
+          ['Economy', 0.85],
+        ],
+      },
       'circle-stroke-width': 1,
       'circle-stroke-color': '#FFFFFF',
     },
@@ -130,7 +144,7 @@ function drawMap() {
     console.log(feature);
     let content = '';
     if (!feature.properties.access) {
-      content += `<h6>${feature.properties.rank}. ${feature.properties.classifcation} courses</h6>`;
+      content += `<h6>${feature.properties.rank}. ${feature.properties.classification} courses</h6>`;
     }
     if (feature.properties.access) {
       content += `<h5>${feature.properties.rank}.  ${feature.properties.coursename}</h5>`;
@@ -163,10 +177,134 @@ function drawMap() {
   });
 
 
-  $('#switcher').click(() => {
-    console.log('switch');
-    map.setLayoutProperty('top100courses', 'visibility', 'none');
-    map.setLayoutProperty('pub50courses', 'visibility', 'visible');
+  // SWAPPING VIEWS ////////////////////////////////////////////////////////
+
+  function swapViews(view) {
+    // hide both filter groups
+    $('.select--filter-group').addClass('noshow');
+    if (view === 'top-100') {
+      // if top-100, display it's filter group and display only it's map layer
+
+      $('#select__top100').removeClass('noshow');
+      map.setLayoutProperty('top100courses', 'visibility', 'visible');
+      map.setLayoutProperty('topPubCourses', 'visibility', 'none');
+      map.setLayoutProperty('pub50courses', 'visibility', 'none');
+    } else {
+      // if it's public, display it's filter group, then determine if the top50
+      // layer is set to be active, and display it. if not, display the topPubCourses layer
+      $('#select__public').removeClass('noshow');
+      if ($('#select__top50').hasClass('select--active') === true) {
+        console.log('true');
+        map.setLayoutProperty('top100courses', 'visibility', 'none');
+        map.setLayoutProperty('topPubCourses', 'visibility', 'none');
+        map.setLayoutProperty('pub50courses', 'visibility', 'visible');
+      } else {
+        map.setLayoutProperty('top100courses', 'visibility', 'none');
+        map.setLayoutProperty('topPubCourses', 'visibility', 'visible');
+        map.setLayoutProperty('pub50courses', 'visibility', 'none');
+      }
+    }
+  }
+
+  // when the top 100/public nav li is clicked ...
+  $('#golf-nav li').click(function () {
+    // get the id
+    const view = $(this).attr('id');
+
+    // set the proper li to the active state
+    $('#golf-nav li').removeClass('nav--active');
+    $(this).addClass('nav--active');
+
+    // and pass the id to the swapViews function, which displays the right filter box
+    // and map layers
+    swapViews(view);
+  });
+
+
+  // if one of the filters for the top 100 is clicked ...
+  $('#select__top100 .select__option').click(function () {
+    // toggle it's active class
+    $(this).toggleClass('select--active');
+
+    // set up variables for stops and what li elements to filter through
+    const stops = [];
+    const filters = $(this).parent('ul').children('.select__option');
+
+    // iterate through the filters
+    $.each(filters, function () {
+      // create an array for that filter's stop
+      const stop = [];
+      // set the first position to the text of the filter
+      stop[0] = $(this).text();
+      // check if that filter is activated, and if so, set the second position to 0.75
+      // if not, set to 0
+      stop[1] = $(this).hasClass('select--active') === true ? 0.75 : 0;
+
+      // push that stop to the stops array
+      stops.push(stop);
+    });
+
+    // create a new paint object using the stops array
+    const paint = {
+      property: 'access',
+      type: 'categorical',
+      stops,
+    };
+
+    // update the layer's circle-opacity paint property with the new paint object
+    map.setPaintProperty('top100courses', 'circle-opacity', paint);
+  });
+
+  // if one of the public course filters is clicked ...
+  $('#select__public .select__option').click(function () {
+    // check if it's the top50 filter
+    if ($(this).attr('id') === 'select__top50') {
+      // if it is, set only that filter to the active state
+      $('#select__public .select__option').removeClass('select--active');
+      $(this).addClass('select--active');
+
+      // hide the other pubcourses layers and show the pub50 layer
+      map.setLayoutProperty('topPubCourses', 'visibility', 'none');
+      map.setLayoutProperty('pub50courses', 'visibility', 'visible');
+    } else {
+      // if it's not the pub50 filter, toggle the active class
+      $(this).toggleClass('select--active');
+
+      // turn off the top50 filter active class
+      $('#select__top50').removeClass('select--active');
+
+      // create new variables for stops and the filters to iterate through
+      const stops = [];
+      const filters = $(this).parent('ul').children('.select__sub-filter');
+
+      // iterate through the filters
+      $.each(filters, function () {
+        // create a new stop for each filter
+        const stop = [];
+        // set the stop's first position to the string of the filter selected
+        // and the second position to an opacity value that reflects whether the filter
+        // was selected or not
+        stop[0] = $(this).text();
+        stop[1] = $(this).hasClass('select--active') === true ? 0.85 : 0;
+
+        // push that stop to the stops array
+        stops.push(stop);
+      });
+
+      // create a new paint object using the stops array
+      const paint = {
+        property: 'classification',
+        type: 'categorical',
+        stops,
+      };
+
+      // update the pubCourses circle-opacity paint property
+      map.setPaintProperty('topPubCourses', 'circle-opacity', paint);
+
+      // hide the pub50 layer and display the topPub layer
+      map.setLayoutProperty('topPubCourses', 'visibility', 'visible');
+      map.setLayoutProperty('pub50courses', 'visibility', 'none');
+    }
   });
 }
 
