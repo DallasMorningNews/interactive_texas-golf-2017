@@ -28,7 +28,7 @@ const map = new mapboxgl.Map({
   container: 'map',
   style: 'http://maps.dallasnews.com/styles.json',
   center: [-99.10238, 31.23492],
-  zoom: 5,
+  zoom: 4.5,
 });
 
 map.scrollZoom.disable();
@@ -36,6 +36,7 @@ map.addControl(new mapboxgl.NavigationControl());
 
 
 function drawMap() {
+  console.log(top100);
   map.addSource('top100', {
     type: 'geojson',
     data: top100,
