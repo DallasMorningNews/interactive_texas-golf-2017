@@ -275,32 +275,42 @@ function drawMap() {
       $('#select__top50').removeClass('select--active');
 
       // create new variables for stops and the filters to iterate through
-      const stops = [];
+      const stops = ['any'];
       const filters = $(this).parent('ul').children('.select__sub-filter');
 
       // iterate through the filters
       $.each(filters, function () {
         // create a new stop for each filter
-        const stop = [];
-        // set the stop's first position to the string of the filter selected
-        // and the second position to an opacity value that reflects whether the filter
-        // was selected or not
-        stop[0] = $(this).text();
-        stop[1] = $(this).hasClass('select--active') === true ? 0.85 : 0;
+        if ($(this).hasClass('select--active') === true) {
+          const text = $(this).text();
+          const key = 'classification';
+          const filter = ['==', key, text];
+          // push that stop to the stops array
+          stops.push(filter);
+        }
 
-        // push that stop to the stops array
-        stops.push(stop);
+        // // set the stop's first position to the string of the filter selected
+        // // and the second position to an opacity value that reflects whether the filter
+        // // was selected or not
+        // stop[0] = $(this).text();
+        // stop[1] = $(this).hasClass('select--active') === true ? 0.85 : 0;
+
+        // // push that stop to the stops array
+        // stops.push(filter);
       });
 
-      // create a new paint object using the stops array
-      const paint = {
-        property: 'classification',
-        type: 'categorical',
-        stops,
-      };
+      // // create a new paint object using the stops array
+      // const paint = {
+      //   property: 'classification',
+      //   type: 'categorical',
+      //   stops,
+      // };
 
       // update the pubCourses circle-opacity paint property
-      map.setPaintProperty('topPubCourses', 'circle-opacity', paint);
+      // map.setPaintProperty('topPubCourses', 'circle-opacity', paint);
+      console.log(stops);
+
+      map.setFilter('topPubCourses', stops);
 
       // hide the pub50 layer and display the topPub layer
       map.setLayoutProperty('topPubCourses', 'visibility', 'visible');
