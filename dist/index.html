@@ -6,6 +6,7 @@
 
     <link rel="stylesheet" href="https://cloud.typography.com/6922714/7642152/css/fonts.css">
     <link href='https://api.mapbox.com/mapbox-gl-js/v0.29.0/mapbox-gl.css' rel='stylesheet' />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" />
     <link rel="stylesheet" href="css/styles.css" />
     <script src='https://api.mapbox.com/mapbox-gl-js/v0.29.0/mapbox-gl.js'></script>
     <script src='js/geojson.js' type="text/javascript"></script>
@@ -14,40 +15,65 @@
     <!-- Your markup goes here -->
 
     <div id="embed-content">
-      <div class="chatter">
-        <h4>The Top 100 golf courses across Texas</h4>
-        <p>From Big Bend to Big D, we rank the Top 100 golf courses </p>
-        <nav id="golf-nav">
-          <ul>
-            <li>View: </li>
-            <li id="top-100" class="nav--active">Top 100</li>
-            <li id="top-public">Best public</li>
-          </ul>
-        </nav>
-      </div>
-
-      <div id="map-container">
-        <div id="course-select">
-          <ul class="select--filter-group" id="select__top100">
-            <li>Filter by:</li>
-            <li id="select__100private" class="select--active select__option">Private</li>
-            <li id="select__100public" class="select--active select__option">Public</li>
-          </ul>
-
-          <ul id="select__public" class="select--filter-group noshow">
-            <li>Filter by:</li>
-            <li id="select__top50" class="select--active select__option">Top 50</li>
-            <li id="select__economy" class="select__option select__sub-filter">Economy</li>
-            <li id="select__high" class="select__option select__sub-filter">High</li>
-            <li id="select__expensive" class="select__option select__sub-filter">Expensive</li>
-          </ul>
-
+      <span id="content-switcher"><i class="fa fa-list"></i></span>
+      <div id="map-view">
+        <div class="chatter">
+          <h4>The Top 100 golf courses across Texas</h4>
+          <p>From Big Bend to Big D, we rank the Top 100 golf courses </p>
+          <nav class="golf__nav" id="map__nav">
+            <ul>
+              <li>View: </li>
+              <li id="top-100" class="nav--active view__selector">Top 100</li>
+              <li id="top-public" class="view__selector">Best public</li>
+            </ul>
+          </nav>
         </div>
-        <div id="map"></div>
+
+        <div id="map-container">
+          <div id="course-select">
+            <ul class="select--filter-group" id="select__top100">
+              <li>Filter by:</li>
+              <li id="select__100private" class="select--active select__option">Private</li>
+              <li id="select__100public" class="select--active select__option">Public</li>
+            </ul>
+
+            <ul id="select__public" class="select--filter-group noshow">
+              <li>Filter by:</li>
+              <li id="select__top50" class="select--active select__option">Top 50</li>
+              <li id="select__economy" class="select__option select__sub-filter">Economy</li>
+              <li id="select__high" class="select__option select__sub-filter">High</li>
+              <li id="select__expensive" class="select__option select__sub-filter">Expensive</li>
+            </ul>
+
+          </div>
+          <div id="map"></div>
+        </div>
+
+        <p class="note">Rankings are determined by the average score of ratings by The Dallas Morning News’ Texas Golf panel. Panel members rated courses on a 1-10 scale. To be eligible for the Top 100, a course needed to be rated by 12 of the 90 panel members, 13 percent of the panel. Click on locations below to see more info about each course. (Public course price breakdown: Economy: $49 or less; Mid-priced: $50 - $70; Expensive: $71 and up)</p>
+        <!-- The rest of your content goes here -->
       </div>
 
-      <p class="note">Rankings are determined by the average score of ratings by The Dallas Morning News’ Texas Golf panel. Panel members rated courses on a 1-10 scale. To be eligible for the Top 100, a course needed to be rated by 12 of the 90 panel members, 13 percent of the panel. Click on locations below to see more info about each course. (Public course price breakdown: Economy: $49 or less; Mid-priced: $50 - $70; Expensive: $71 and up)</p>
-      <!-- The rest of your content goes here -->
+      <div id="table-view" class="noshow">
+        <div class="chatter">
+          <h4>The Top 100 golf courses across Texas</h4>
+          <p>From Big Bend to Big D, we rank the Top 100 golf courses </p>
+          <nav class="golf__nav" id="table__nav">
+            <ul>
+              <li>View: </li>
+              <li id="top-100-table-view" class="nav--active view__selector" data-target="top-100-table">Top 100</li>
+              <li id="top-public-view" data-target="public-table" class="view__selector">Best public</li>
+            </ul>
+          </nav>
+
+          <table id="top-100-table" class="golf__table">
+            <tr><th>Rk</th><th>Course</th><th>City</th><th>Access</th><th>Fee ($)</th></tr>
+          </table>
+
+          <table id="public-table" class="golf__table noshow">
+            <tr><th>Rk</th><th>Course</th><th>City</th><th>Fee ($)</th></tr>
+          </table>
+        </div>
+      </div>
     </div>
 
     <script src="js/scripts.js"></script>

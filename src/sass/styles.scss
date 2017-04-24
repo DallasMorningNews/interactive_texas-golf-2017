@@ -4,7 +4,7 @@
 @import 'variables';
 @import 'base';
 
-html.embedded {
+html.embedded, html.not-embedded {
   // Applied when embedded using Pym.js
   font-size: 10px;
 }
@@ -15,6 +15,29 @@ body {
   &:after {
     content: " ";
     display: table;
+  }
+}
+#embed-content {
+  position: relative;
+}
+.chatter {
+  padding-right: 35px;
+}
+
+#content-switcher {
+  position: absolute;
+  top: 20px;
+  right: 15px;
+  width: 30px;
+  height: 30px;
+  background-color: $chartRed;
+  color: white;
+  border-radius: 50%;
+  text-align: center;
+  cursor: pointer;
+  i {
+    font-size: 16px;
+    line-height: 30px;
   }
 }
 
@@ -54,7 +77,7 @@ ul {
   }
 }
 
-#golf-nav {
+.golf__nav {
   ul {
     li {
       display: inline-block;
@@ -64,11 +87,13 @@ ul {
       text-transform: uppercase;
       cursor: pointer;
       color: $chartRed;
+      padding: 5px;
       &:first-of-type {
         text-transform: none;
         font-weight: normal;
         cursor: auto;
         color: black;
+        padding: 5px 0;
       }
     }
   }
@@ -113,20 +138,61 @@ ul {
   }
 }
 
-.nav--active {border-bottom: 2px solid $chartRed;}
+.nav--active {
+  background-color: $chartRed;
+  color: white !important;
+  position: relative;
+  &:after {
+    @include psuedoElement(8px, 8px, absolute);
+    bottom: -4px;
+    left: 50%;
+    margin-left: -4px;
+    @include rotate(45deg);
+    background-color: $chartRed;
+  }
+}
 
-.select--active {background-color: $black235;}
+.select--active {
+  background-color: $black235;
+}
 
 #select__100public:before {background-color: #fec44f;}
 #select__100private:before {background-color: #4575b4;}
 #select__top50:before {background-color: #52b033;}
-#select__economy:before {background-color: #fed976;}
+#select__economy:before {background-color: #fec633;}
 #select__high:before {background-color: #fc4e2a;}
 #select__expensive:before {background-color: #800026;}
 
 .note {
   @include type(1.1rem, 1.5rem, 0);
 }
+
+.golf__table {
+  @include type(1.2rem, 1.5rem, 0);
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
+  margin-top: 1.2rem;
+  th {
+    text-align: left;
+  }
+  tr {
+    border-bottom: 1px solid rgb(225,225,225);
+  }
+  td {
+    padding: .2rem .5rem;
+  }
+}
+
+@media (max-width: 600px) {
+  #top-100-table {
+      td:nth-of-type(3), th:nth-of-type(3) {
+        display: none;
+      }
+  }
+}
+
+
 
 .noshow {
   display: none;

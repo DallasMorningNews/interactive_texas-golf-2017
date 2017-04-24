@@ -113,7 +113,7 @@ function drawMap() {
         stops: [
           ['Expensive', '#800026'],
           ['High', '#fc4e2a'],
-          ['Economy', '#fed976'],
+          ['Economy', '#fec633'],
         ],
       },
       'circle-opacity': {
@@ -195,7 +195,6 @@ function drawMap() {
       // layer is set to be active, and display it. if not, display the topPubCourses layer
       $('#select__public').removeClass('noshow');
       if ($('#select__top50').hasClass('select--active') === true) {
-        console.log('true');
         map.setLayoutProperty('top100courses', 'visibility', 'none');
         map.setLayoutProperty('topPubCourses', 'visibility', 'none');
         map.setLayoutProperty('pub50courses', 'visibility', 'visible');
@@ -208,12 +207,12 @@ function drawMap() {
   }
 
   // when the top 100/public nav li is clicked ...
-  $('#golf-nav li').click(function () {
+  $('#map__nav li.view__selector').click(function () {
     // get the id
     const view = $(this).attr('id');
 
     // set the proper li to the active state
-    $('#golf-nav li').removeClass('nav--active');
+    $('#map__nav li').removeClass('nav--active');
     $(this).addClass('nav--active');
 
     // and pass the id to the swapViews function, which displays the right filter box
@@ -228,32 +227,24 @@ function drawMap() {
     $(this).toggleClass('select--active');
 
     // set up variables for stops and what li elements to filter through
-    const stops = [];
+    const stops = ['any'];
     const filters = $(this).parent('ul').children('.select__option');
 
     // iterate through the filters
     $.each(filters, function () {
-      // create an array for that filter's stop
-      const stop = [];
-      // set the first position to the text of the filter
-      stop[0] = $(this).text();
-      // check if that filter is activated, and if so, set the second position to 0.75
-      // if not, set to 0
-      stop[1] = $(this).hasClass('select--active') === true ? 0.75 : 0;
-
-      // push that stop to the stops array
-      stops.push(stop);
+      // if the filter has a select--active class, create a filter array for the
+      // appropriate set of courses
+      if ($(this).hasClass('select--active') === true) {
+        const text = $(this).text();
+        const key = 'access';
+        const filter = ['==', key, text];
+        // push that stop to the stops array
+        stops.push(filter);
+      }
     });
 
-    // create a new paint object using the stops array
-    const paint = {
-      property: 'access',
-      type: 'categorical',
-      stops,
-    };
-
-    // update the layer's circle-opacity paint property with the new paint object
-    map.setPaintProperty('top100courses', 'circle-opacity', paint);
+    // apply tghat filter set to the top100courses layer
+    map.setFilter('top100courses', stops);
   });
 
   // if one of the public course filters is clicked ...
@@ -280,7 +271,7 @@ function drawMap() {
 
       // iterate through the filters
       $.each(filters, function () {
-        // create a new stop for each filter
+        // create a new filter array for corresponding set of courses
         if ($(this).hasClass('select--active') === true) {
           const text = $(this).text();
           const key = 'classification';
@@ -288,28 +279,9 @@ function drawMap() {
           // push that stop to the stops array
           stops.push(filter);
         }
-
-        // // set the stop's first position to the string of the filter selected
-        // // and the second position to an opacity value that reflects whether the filter
-        // // was selected or not
-        // stop[0] = $(this).text();
-        // stop[1] = $(this).hasClass('select--active') === true ? 0.85 : 0;
-
-        // // push that stop to the stops array
-        // stops.push(filter);
       });
 
-      // // create a new paint object using the stops array
-      // const paint = {
-      //   property: 'classification',
-      //   type: 'categorical',
-      //   stops,
-      // };
-
-      // update the pubCourses circle-opacity paint property
-      // map.setPaintProperty('topPubCourses', 'circle-opacity', paint);
-      console.log(stops);
-
+      // apply the filter set to topPubCourses layer
       map.setFilter('topPubCourses', stops);
 
       // hide the pub50 layer and display the topPub layer
@@ -318,6 +290,79 @@ function drawMap() {
     }
   });
 }
+
+/*
+================================
+== BUILD TABLES
+================================
+*/
+
+// pass our data set and the target id of the table we want to build
+function drawTable(data, target) {
+  // pull just the features from the geojson data set
+  const courses = data.features;
+
+  // iterate through those features, and build out the row for each course, then
+  // append that row to the target table
+  $.each(courses, (k, v) => {
+    const properties = v.properties;
+    if (target === 'top-100-table') {
+      const row = `<tr><td>${properties.rank}</td><td>${properties.coursename}</td><td>${properties.city}</td><td>${properties.access}</td><td>${properties.fee}</td>`;
+      $(`#${target}`).append(row);
+    } else {
+      const row = `<tr><td>${properties.rank}</td><td>${properties.coursename}</td><td>${properties.city}</td><td>${properties.fee}</td>`;
+      $(`#${target}`).append(row);
+    }
+  });
+
+  // lastly, resize the embed
+  pymChild.sendHeight();
+}
+
+// clicking one of the table nav views
+$('#table__nav ul li.view__selector').click(function () {
+  // remove the active class from all view__selectors, then add the nav--active
+  // class to the clicked view__selector
+  $('#table__nav ul li').removeClass('nav--active');
+  $(this).addClass('nav--active');
+
+  // hide all tables
+  $('.golf__table').addClass('noshow');
+
+  // grab the data-target attribute of the view__selector clicked. This corresponds
+  // to the table id
+  const tarTable = $(this).attr('data-target');
+
+  // show the corresponding table
+  $(`#${tarTable}`).removeClass('noshow');
+
+  // grab the new height and adjust the embed
+  pymChild.sendHeight();
+});
+
+
+/*
+================================
+== CONTENT SWITCHER
+================================
+*/
+
+$('#content-switcher').click(function () {
+  if ($(this).children('i').hasClass('fa-list') === true) {
+    $(this).children('i').removeClass('fa-list').addClass('fa-map');
+
+    $('#map-view').addClass('noshow');
+    $('#table-view').removeClass('noshow');
+  } else {
+    $(this).children('i').removeClass('fa-map').addClass('fa-list');
+
+    $('#table-view').addClass('noshow');
+    $('#map-view').removeClass('noshow');
+  }
+
+  pymChild.sendHeight();
+});
+
 
 /*
 ================================
@@ -338,17 +383,21 @@ function getData() {
   $.getJSON(sourceArray[0], (data) => {
     topPub = GeoJSON.parse(data, { Point: ['latitude', 'longitude'] });
     i += 1;
-    if (i >= DATADRAWS) { drawMap(); }
+    if (i >= DATADRAWS) {
+      drawMap();
+    }
   });
 
   $.getJSON(sourceArray[1], (data) => {
     top100 = GeoJSON.parse(data, { Point: ['latitude', 'longitude'] });
+    drawTable(top100, 'top-100-table');
     i += 1;
     if (i >= DATADRAWS) { drawMap(); }
   });
 
   $.getJSON(sourceArray[2], (data) => {
     pub50 = GeoJSON.parse(data, { Point: ['latitude', 'longitude'] });
+    drawTable(pub50, 'public-table');
     i += 1;
     if (i >= DATADRAWS) { drawMap(); }
   });
