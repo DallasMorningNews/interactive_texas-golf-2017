@@ -26,7 +26,7 @@ const sourceArray = [
 
 const map = new mapboxgl.Map({
   container: 'map',
-  style: 'http://maps.dallasnews.com/styles.json',
+  style: 'https://maps.dallasnews.com/styles.json',
   center: [-99.10238, 31.23492],
   zoom: 4.5,
 });
