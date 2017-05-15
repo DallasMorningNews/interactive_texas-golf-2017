@@ -21,23 +21,28 @@ body {
   position: relative;
 }
 .chatter {
-  padding-right: 35px;
+  padding-top: 30px;
 }
 
 #content-switcher {
   position: absolute;
   top: 20px;
   right: 15px;
-  width: 30px;
-  height: 30px;
-  background-color: $chartRed;
-  color: white;
-  border-radius: 50%;
   text-align: center;
   cursor: pointer;
+  font-family: $sans;
+  color: $chartRed;
+  @include type(1.2rem, 1.2rem, 0);
+  font-weight: bold;
   i {
+    width: 30px;
+    height: 30px;
+    background-color: $chartRed;
+    color: white;
+    border-radius: 50%;
     font-size: 16px;
     line-height: 30px;
+    margin-left: 5px;
   }
 }
 

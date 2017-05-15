@@ -353,11 +353,14 @@ $('#content-switcher').click(function () {
 
     $('#map-view').addClass('noshow');
     $('#table-view').removeClass('noshow');
+    $('.content__label').text('VIEW MAP');
   } else {
     $(this).children('i').removeClass('fa-map').addClass('fa-list');
 
     $('#table-view').addClass('noshow');
     $('#map-view').removeClass('noshow');
+    $('.content__label').text('VIEW LIST');
+
   }
 
   pymChild.sendHeight();
