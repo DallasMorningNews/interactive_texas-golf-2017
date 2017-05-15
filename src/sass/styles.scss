@@ -94,13 +94,14 @@ ul {
       cursor: pointer;
       color: $chartRed;
       padding: 5px;
-      &:first-of-type {
-        text-transform: none;
-        font-weight: normal;
-        cursor: auto;
-        color: black;
-        padding: 5px 0;
+      &:last-of-type {
+        margin-right: 0;
       }
+    }
+  }
+  @media (max-width: 450px) {
+    ul li {
+      margin-right: 5px;
     }
   }
 }
