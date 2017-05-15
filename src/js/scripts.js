@@ -360,7 +360,6 @@ $('#content-switcher').click(function () {
     $('#table-view').addClass('noshow');
     $('#map-view').removeClass('noshow');
     $('.content__label').text('VIEW LIST');
-
   }
 
   pymChild.sendHeight();
