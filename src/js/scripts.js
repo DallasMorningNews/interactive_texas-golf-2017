@@ -12,7 +12,7 @@ let topPub = [];
 
 // paths to our json data
 const sourceArray = [
-  '//interactives.dallasnews.com/data-store/2017/04-2017-texas-golf-public-test.json',
+  '//interactives.dallasnews.com/data-store/2017/04-2017-texas-golf-public.json',
   '//interactives.dallasnews.com/data-store/2017/04-2017-texas-golf-top-100.json',
   '//interactives.dallasnews.com/data-store/2017/04-2017-texas-golf-pub-50.json',
 ];
@@ -54,16 +54,16 @@ function drawMap() {
         property: 'access',
         type: 'categorical',
         stops: [
-          ['private', '#4575b4'],
-          ['public', '#fec44f'],
+          ['Private', '#4575b4'],
+          ['Public', '#fec44f'],
         ],
       },
       'circle-opacity': {
         property: 'access',
         type: 'categorical',
         stops: [
-          ['private', 0.75],
-          ['public', 0.75],
+          ['Private', 0.75],
+          ['Public', 0.75],
         ],
       },
       'circle-stroke-width': 1,
