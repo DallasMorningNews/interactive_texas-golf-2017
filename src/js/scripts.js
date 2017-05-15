@@ -315,6 +315,13 @@ function drawTable(data, target) {
     }
   });
 
+  if (target === 'public-table') {
+    console.log($('#public-table').find('tr').eq(1).html());
+    $('#public-table').find('tr').eq(1).before('<h6>Expensive</h6>');
+    $('#public-table').find('tr').eq(26).before('<h6>High</h6>');
+    $('#public-table').find('tr').eq(51).before('<h6>Economy</h6>');
+  }
+
   // lastly, resize the embed
   pymChild.sendHeight();
 }
@@ -384,6 +391,7 @@ function getData() {
   // if we have, we'll run our initial map drawing function
   $.getJSON(sourceArray[0], (data) => {
     topPub = GeoJSON.parse(data, { Point: ['latitude', 'longitude'] });
+    drawTable(topPub, 'public-table');
     i += 1;
     if (i >= DATADRAWS) {
       drawMap();
@@ -399,7 +407,7 @@ function getData() {
 
   $.getJSON(sourceArray[2], (data) => {
     pub50 = GeoJSON.parse(data, { Point: ['latitude', 'longitude'] });
-    drawTable(pub50, 'public-table');
+    drawTable(pub50, 'public50-table');
     i += 1;
     if (i >= DATADRAWS) { drawMap(); }
   });

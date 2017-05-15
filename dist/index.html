@@ -56,17 +56,22 @@
       <div id="table-view" class="noshow">
         <div class="chatter">
           <h4>The Top 100 golf courses across Texas</h4>
-          <p>From Big Bend to Big D, we rank the Top 100 golf courses </p>
+          <p>Click/touch the course locations below to view their name, rank, location, fee and website. To view the full list, click the button in the upper-right corner above.</p>
           <nav class="golf__nav" id="table__nav">
             <ul>
               <li>View: </li>
               <li id="top-100-table-view" class="nav--active view__selector" data-target="top-100-table">Top 100</li>
-              <li id="top-public-view" data-target="public-table" class="view__selector">Best public</li>
+              <li id="top-public-view" data-target="public50-table" class="view__selector">Best public</li>
+              <li id="top-public-view" data-target="public-table" class="view__selector">Best by fee</li>
             </ul>
           </nav>
 
           <table id="top-100-table" class="golf__table">
             <tr><th>Rk</th><th>Course</th><th>City</th><th>Access</th><th>Fee ($)</th></tr>
+          </table>
+
+          <table id="public50-table" class="golf__table noshow">
+            <tr><th>Rk</th><th>Course</th><th>City</th><th>Fee ($)</th></tr>
           </table>
 
           <table id="public-table" class="golf__table noshow">
