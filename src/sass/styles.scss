@@ -207,3 +207,8 @@ ul {
 .noshow {
   display: none;
 }
+
+.mapboxgl-ctrl-attrib {
+  display: none !important;
+  visibility: hidden;
+}
